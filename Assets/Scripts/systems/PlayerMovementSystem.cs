@@ -6,7 +6,7 @@ public class PlayerMovementSystem: ComponentSystem
     private struct filter
     {
         public Rigidbody rigidbody;
-        public InputComponent inputComponent;
+        public PositionComponent inputComponent;
     }
     
     protected override void OnUpdate()

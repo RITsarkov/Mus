@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class InputComponent : MonoBehaviour
+public class PositionComponent : MonoBehaviour
 {
     public float horizontal;
     public float vertical;

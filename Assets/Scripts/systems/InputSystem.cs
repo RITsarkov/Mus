@@ -6,7 +6,7 @@ public class InputSystemInputSystem : ComponentSystem
     private struct Data
     {
         public readonly int Length;
-        public ComponentArray<InputComponent> inputComponent;
+        public ComponentArray<PositionComponent> inputComponent;
     }
 
     //Inject = need data!
