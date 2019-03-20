@@ -1,5 +1,5 @@
 using Unity.Entities;
 
-public class Firing : IComponentData 
+public struct Firing : IComponentData 
 {
 }

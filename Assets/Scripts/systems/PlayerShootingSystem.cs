@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
@@ -8,8 +7,8 @@ public class PlayerShootingSystem : JobComponentSystem
 
     private struct PlayerShootingJob : IJobParallelFor
     {
-        public EntityArray EntityArray;
-        public EntityCommandBuffer EntityCommandBuffer;
+        [Unity.Collections.ReadOnly] public EntityArray EntityArray;
+        [Unity.Collections.ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
         public bool IsFiring;
         
         public void Execute(int index)
@@ -19,6 +18,7 @@ public class PlayerShootingSystem : JobComponentSystem
             EntityCommandBuffer.AddComponent(EntityArray[index], new Firing());
         }
     }
+
     
     private struct Data
     {
