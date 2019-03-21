@@ -9,13 +9,11 @@ public class PlayerShootingSystem : JobComponentSystem
     {
         [Unity.Collections.ReadOnly] public EntityArray EntityArray;
         [Unity.Collections.ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
-        public bool IsFiring;
+        public float CurrentTime;
         
         public void Execute(int index)
         {
-            if (!IsFiring)
-                return;
-            EntityCommandBuffer.AddComponent(EntityArray[index], new Firing());
+            EntityCommandBuffer.AddComponent(EntityArray[index], new Firing {FiredAt = CurrentTime});
         }
     }
 
@@ -33,13 +31,18 @@ public class PlayerShootingSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        return new PlayerShootingJob
+        if (Input.GetButton("Fire1"))
         {
-            EntityArray = _data.Entities,
-            EntityCommandBuffer = _barrier.CreateCommandBuffer(),
-            IsFiring = Input.GetButton("Fire1")
-        }.Schedule(_data.Length, 64, inputDeps);
+            return new PlayerShootingJob
+            {
+                EntityArray = _data.Entities,
+                EntityCommandBuffer = _barrier.CreateCommandBuffer(),
+                CurrentTime = Time.time
+            }.Schedule(_data.Length, 64, inputDeps);
+        }
+        return new JobHandle();
     }
+    
 }
 
 public class PlayerShootingBarrier : BarrierSystem
