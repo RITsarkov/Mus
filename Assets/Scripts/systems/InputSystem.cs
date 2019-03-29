@@ -23,9 +23,4 @@ public class InputSystemInputSystem : ComponentSystem
             _data.inputComponent[i].vertical = vertical;
         }
     }
-    
-    
- 
-    
-    
 }
