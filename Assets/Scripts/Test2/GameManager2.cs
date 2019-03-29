@@ -67,7 +67,7 @@ namespace Test2
                 deltaTime = Time.deltaTime
             };
             //х3 но вроде бы на этом месте все потоки и запускаются
-            moveHandle = movementJob.Schedule(transformsArray.length, 64);
+//            moveHandle = movementJob.Schedule(transformsArray.length, 64);
 
             for (int i = 0; i < transformsArray.length; i++)
             {

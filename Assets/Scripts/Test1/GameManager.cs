@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using Test1;
-using Unity.Jobs;
+﻿using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Jobs;
 
@@ -54,7 +50,7 @@ namespace Test1
         {
             moveHandle.Complete();
 
-            if (Input.GetButtonDown("space"))
+            if (Input.GetButtonDown("Jump"))
                 AddEnemy(enemyPrefab, enemyCount);
 
             movementJob = new MovementJob()
