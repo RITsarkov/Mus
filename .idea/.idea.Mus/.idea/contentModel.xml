@@ -9,8 +9,10 @@
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
           <e p="component" t="Include">
+            <e p="PlayerComponent.cs" t="Include" />
             <e p="PositionComponent.cs" t="Include" />
             <e p="RotationComponent.cs" t="Include" />
+            <e p="SpeedComponent.cs" t="Include" />
           </e>
           <e p="systems" t="Include">
             <e p="FiringSystem" t="Include">
@@ -21,6 +23,7 @@
             </e>
             <e p="InputPositionSystem.cs" t="Include" />
             <e p="InputRotationSystem.cs" t="Include" />
+            <e p="MovementSysten.cs" t="Include" />
             <e p="PlayerMovementSystem.cs" t="Include" />
             <e p="PlayerRotationSystem.cs" t="Include" />
           </e>
@@ -30,7 +33,6 @@
           </e>
           <e p="Test2" t="Include">
             <e p="GameManager2.cs" t="Include" />
-            <e p="MovementJob2.cs" t="Include" />
           </e>
           <e p="TestSystem" t="Include">
             <e p="Rotater.cs" t="Include" />
