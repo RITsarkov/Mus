@@ -1,28 +1,23 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class PlayerRotationSystem : ComponentSystem
+public class RotationSystem : ComponentSystem
 {
-    private struct Filter
+    private struct Data
     {
-        public Transform transform;
-        public RotationComponent rotationComponent;
+        public readonly int Length;
+        public ComponentDataArray<Rotation> RotationComponent;
+        public ComponentArray<Rigidbody> Rigidbody;
     }
 
-    
-    
+    [Inject] private Data _data;
+
     protected override void OnUpdate()
     {
-        var mousePosition = Input.mousePosition;
-        var cameraRay = Camera.main.ScreenPointToRay(mousePosition);
-        var layerMask = LayerMask.GetMask("Floor");
-
-        if (Physics.Raycast(cameraRay, out var hit, 200, layerMask))
-        foreach (Filter entity in GetEntities<Filter>())
+        for (int i = 0; i < _data.Length; i++)
         {
-            var forward = hit.point - entity.transform.position;
-            var rotation = Quaternion.LookRotation(forward);
-            entity.rotationComponent.Value = new Quaternion(0, rotation.y, 0, rotation.w);
+            Quaternion rotation = _data.RotationComponent[i].rotation;
+            _data.Rigidbody[i].MoveRotation(rotation.normalized);
         }
     }
 }

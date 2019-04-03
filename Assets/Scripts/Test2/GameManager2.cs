@@ -1,5 +1,7 @@
 ﻿
+using System.Runtime.InteropServices;
 using Unity.Collections;
+using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Jobs;
@@ -10,8 +12,9 @@ namespace Test2
     public class GameManager : MonoBehaviour
     {
 
-        public static GameManager GM;
+        public static EntityManager _manager;
 
+        
         [Header("Enemy Setting")] 
         public GameObject enemyPrefab;
         public float enemySpeed = 1f;
@@ -28,67 +31,31 @@ namespace Test2
 
 //==============================================================================================
 
-//        private NativeArray<Vector3> positionArray;
-//        private NativeArray<Vector3> velocityArray;
-        private TransformAccessArray transformsArray;
-        private MovementJob2 movementJob;
-        private JobHandle moveHandle;
-//        private GameObject[] EnemyArray;
 
-
-        //При закрытии 
-        private void OnDisable()
+        void Start()
         {
-            //Выполнить все работы
-            moveHandle.Complete();
-            //Отчистить все данные
-            transformsArray.Dispose();
-        }
-
-
-        private void Update()
-        {
-            moveHandle.Complete();
-
-            if (Input.GetButtonDown("space"))
-                AddEnemy(enemyPrefab, enemyCount);
-            
-            
-            var velocity = new NativeArray<Vector3>(500, Allocator.Persistent);
-            for (var i = 0; i < velocity.Length; i++)
-                velocity[i] = new Vector3(0, 0, 1);
-
-            movementJob = new MovementJob2()
-            {
-                transformsArray = transformsArray,
-                velocity = velocity,
-                topBound = topBound,
-                bottomBound = bottomBound,
-                deltaTime = Time.deltaTime
-            };
-            //х3 но вроде бы на этом месте все потоки и запускаются
-//            moveHandle = movementJob.Schedule(transformsArray.length, 64);
-
-            for (int i = 0; i < transformsArray.length; i++)
-            {
-                Debug.Log(transformsArray[i].position);
-            }
-
-            //JobHandle.ScheduleBatchedJobs();
+            _manager = World.Active.GetOrCreateManager<EntityManager>();
+            AddEnemy(enemyCount);
         }
         
-        private void AddEnemy(GameObject enemyPrefab, int amount)
+        
+        private void Update()
         {
-            moveHandle.Complete();
-            transformsArray.capacity = transformsArray.length + amount;
-            for (int i = 0; i < amount; i++)
+            if(Input.GetButton("Jump"))
+                AddEnemy(enemyCount);
+        }
+
+        
+        private void AddEnemy(int amount)
+        {
+            NativeArray<Entity> entities = new NativeArray<Entity>(amount, Allocator.Temp);
+            _manager.Instantiate(enemyPrefab, entities);
+
+            for (int i=0; i < amount; i++)
             {
                 float xVal = Random.Range(leftBound, rightBound);
                 float zVal = Random.Range(0, 10f);
-                Vector3 pos = new Vector3(xVal, 0, zVal + topBound);
-                Quaternion rot = Quaternion.Euler(0f, 180f, 0f);
-                GameObject obj = Instantiate(enemyPrefab, pos, rot);
-                transformsArray.Add(obj.transform);
+//                _manager.SetComponentData(entities[i], new PositionComponent(Value = new ));
             }
         }
     }

@@ -1,8 +1,11 @@
-using UnityEngine;
+using System;
+using Unity.Entities;
 
-
-public class PositionComponent : MonoBehaviour
+[Serializable]
+public struct Position : IComponentData
 {
     public float horizontal;
     public float vertical;
 }
+
+public class PositionComponent : ComponentDataProxy <Position> {}

@@ -6,7 +6,7 @@ public class InputSystemInputSystem : ComponentSystem
     private struct Data
     {
         public readonly int Length;
-        public ComponentArray<PositionComponent> inputComponent;
+        public ComponentDataArray<Position> positionComponent;
     }
 
     //Inject = need data!
@@ -19,8 +19,7 @@ public class InputSystemInputSystem : ComponentSystem
         
         for (int i = 0; i < _data.Length; i++)
         {
-            _data.inputComponent[i].horizontal = horizontal;
-            _data.inputComponent[i].vertical = vertical;
+            _data.positionComponent[i] = new Position{horizontal = horizontal, vertical = vertical};
         }
     }
 }

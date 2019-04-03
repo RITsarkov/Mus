@@ -1,6 +1,11 @@
+using System;
+using Unity.Entities;
 using UnityEngine;
 
-public class RotationComponent: MonoBehaviour
+[Serializable]
+public struct Rotation : IComponentData
 {
-    public Quaternion Value;
+    public Quaternion rotation;
 }
+
+public class RotationComponent : ComponentDataProxy <Rotation> {}
