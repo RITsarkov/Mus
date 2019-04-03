@@ -8,6 +8,7 @@ public class RotationSystem : ComponentSystem
         public readonly int Length;
         public ComponentDataArray<Rotation> RotationComponent;
         public ComponentArray<Rigidbody> Rigidbody;
+        public ComponentDataArray<Player> player;
     }
 
     [Inject] private Data _data;
@@ -16,7 +17,7 @@ public class RotationSystem : ComponentSystem
     {
         for (int i = 0; i < _data.Length; i++)
         {
-            Quaternion rotation = _data.RotationComponent[i].rotation;
+            Quaternion rotation = _data.RotationComponent[i].Value;
             _data.Rigidbody[i].MoveRotation(rotation.normalized);
         }
     }

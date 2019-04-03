@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class InputSystemInputSystem : ComponentSystem
@@ -7,6 +8,7 @@ public class InputSystemInputSystem : ComponentSystem
     {
         public readonly int Length;
         public ComponentDataArray<Position> positionComponent;
+        public ComponentDataArray<Player> player;
     }
 
     //Inject = need data!
@@ -19,7 +21,7 @@ public class InputSystemInputSystem : ComponentSystem
         
         for (int i = 0; i < _data.Length; i++)
         {
-            _data.positionComponent[i] = new Position{horizontal = horizontal, vertical = vertical};
+            _data.positionComponent[i] = new Position{Value = new float3(horizontal, 0, vertical)};
         }
     }
 }

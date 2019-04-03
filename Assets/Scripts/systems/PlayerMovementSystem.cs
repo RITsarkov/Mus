@@ -9,6 +9,7 @@ public class PlayerMovementSystem : ComponentSystem
         public readonly int Length;
         public ComponentDataArray<Position> InputComponent;
         public ComponentArray<Rigidbody> Rigidbody;
+        public ComponentDataArray<Player> player;
     }
 
     [Inject] private Data _data;
@@ -18,7 +19,7 @@ public class PlayerMovementSystem : ComponentSystem
         var deltaTime = Time.deltaTime;
         for (int i = 0; i < _data.Length; i++)
         {
-            var moveVector = new Vector3(_data.InputComponent[i].horizontal, 0, _data.InputComponent[i].vertical);
+            var moveVector = new Vector3(_data.InputComponent[i].Value.x, 0, _data.InputComponent[i].Value.z);
             var movePosition = _data.Rigidbody[i].position + moveVector.normalized * 3 * deltaTime;
             _data.Rigidbody[i].MovePosition(movePosition);
         }

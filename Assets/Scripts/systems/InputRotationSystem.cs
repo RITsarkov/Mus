@@ -8,6 +8,7 @@ public class PlayerRotationSystem : ComponentSystem
         public readonly int Length;
         public ComponentArray<Transform> transform;
         public ComponentDataArray<Rotation> rotationComponent;
+        public ComponentDataArray<Player> player;
     }
     
     [Inject] private Data _data;
@@ -23,7 +24,7 @@ public class PlayerRotationSystem : ComponentSystem
             {
                 Vector3 forward = hit.point - _data.transform[i].transform.position;
                 var rotation = Quaternion.LookRotation(forward);
-                _data.rotationComponent[i] = new Rotation{rotation =  new Quaternion(0, rotation.y, 0, rotation.w)};
+                _data.rotationComponent[i] = new Rotation{Value =  new Quaternion(0, rotation.y, 0, rotation.w)};
             }
     }
 }
