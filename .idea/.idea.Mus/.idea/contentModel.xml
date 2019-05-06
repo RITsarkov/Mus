@@ -9,15 +9,13 @@
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
           <e p="Mus" t="Include">
-            <e p="Bootstrap.cs" t="Include" />
             <e p="components" t="Include">
-              <e p="CharacterComponent.cs" t="Include" />
+              <e p="CharacterHpComponent.cs" t="Include" />
+              <e p="CharacterInfoComponent.cs" t="Include" />
               <e p="CharacterVisualComponent.cs" t="Include" />
+              <e p="NoteMatrix.cs" t="Include" />
             </e>
             <e p="GameManager.cs" t="Include" />
-            <e p="system" t="Include">
-              <e p="battleSystem.cs" t="Include" />
-            </e>
           </e>
           <e p="Test1" t="Include">
             <e p="component" t="Include">
