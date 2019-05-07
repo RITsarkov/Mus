@@ -35,9 +35,14 @@ namespace Mus
             {
                 for (int j = 0; j < y; j++)
                 {
-                    noteMatix[i, j] = Random.Range(0, uniqueNotes);
+                    noteMatix[i, j] = Random.Range(1, uniqueNotes+1);
                 }
             }               
+        }
+
+        public void removeNotes()
+        {
+            
         }
     }
 }
