@@ -9,8 +9,14 @@ namespace Mus
         public NoteCoord noteCoord; 
         
         public GameObject selectedAnimation;
+        public GameObject perspectiveAnimation;
 
-        public void makeSelected(bool selected)
+        public void selectedModeOne(bool selected)
+        {
+            selectedAnimation.SetActive(selected);
+        }      
+        
+        public void perspectiveModeOne(bool selected)
         {
             selectedAnimation.SetActive(selected);
         }

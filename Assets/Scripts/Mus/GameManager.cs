@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +24,7 @@ namespace Mus
             //Грузим панельку
             notePanelPref = Instantiate(notePanel, canvas.transform, false);
 
-            visualizeNoteMatix();
+//            visualizeNoteMatix();
             visualizeNote();
         }
 
@@ -35,9 +36,9 @@ namespace Mus
             {
                 noteMatrix.generateRendomNotes();
                 visualizeNoteMatix();
-                visualizeNote();
+                //visualizeNote();
             }
-            
+
             if (Input.GetButton("Fire1"))
             {
 //                Debug.Log("Mouse Clicked!!!!");
@@ -55,13 +56,19 @@ namespace Mus
                     Note note = hit.collider.gameObject.GetComponent<Note>();
                     //Если была выбрана первая нотка, то вычисляем какие позиции сможет выбрать игрк                    
                     if (isFirstNote())
-                        calculateValidPositions(note);
-                    
-//                    if (isValideNote(note))
-//                    {
-                        note.makeSelected(true);
-                        colidersBuff.Add(hit.collider);
-//                    }
+                    {
+                        List<NoteCoord> valideNotes = noteMatrix.getValidePositions(note);
+                        foreach (var valideNote in valideNotes)
+                        {
+                            GameObject goNote = notesGameObjects[valideNote];
+                            Note n = goNote.gameObject.GetComponent<Note>();
+                            n.perspectiveModeOne(true);
+                        }
+                    }
+
+
+                    note.selectedModeOne(true);
+                    colidersBuff.Add(hit.collider);
                 }
             }
 
@@ -71,40 +78,27 @@ namespace Mus
                 {
                     Debug.Log("Hit" + coll2d.gameObject.transform.parent.name);
                     Note note = coll2d.gameObject.GetComponent<Note>();
-                    note.makeSelected(false);
+                    note.selectedModeOne(false);
+                    note.perspectiveModeOne(false);
                 }
+
                 colidersBuff.Clear();
             }
         }
 
-        private List<int> valideNotePositions;
-        private void calculateValidPositions(Note curNote)
-        {
-            noteMatrix.getValidePositions(curNote);
-        }
 
-        private List<Collider2D> colidersBuff = new List<Collider2D>();        
+        //todo заменить. брать из notesGameObjects по  NoteCoord
+        private List<Collider2D> colidersBuff = new List<Collider2D>();
+
         private bool isFirstNote()
         {
             return colidersBuff.Count == 0;
         }
-        
-
-//        private bool isValideNote(Note note)
-//        {
-//            if (colidersBuff.Count == 0)
-//                return true;
-//
-//            Note firstNote = colidersBuff[0].gameObject.GetComponent<Note>();
-//            if (firstNote.type == note.type)
-//                return true;
-//
-//            return false;
-//        }
 
 
-
-
+        //todo вверх
+        //Содержит ссылки на все нотки
+        private Dictionary<NoteCoord, GameObject> notesGameObjects = new Dictionary<NoteCoord, GameObject>();
 
         private void visualizeNote()
         {
@@ -147,7 +141,9 @@ namespace Mus
 
             Note note = noteGameObject.GetComponent<Note>();
             note.type = noteId;
-            note.noteCoord = new NoteCoord(x,y);
+            NoteCoord nc = new NoteCoord(x, y);
+            note.noteCoord = nc;
+            notesGameObjects.Add(nc, noteGameObject);
         }
 
         private void visualizeNoteMatix()

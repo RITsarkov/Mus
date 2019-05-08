@@ -5,14 +5,14 @@ namespace Mus
 {
     public class NoteMatrix
     {
-        private int x;
-        private int y;
+        private int maxX;
+        private int maxY;
         private int[,] noteMatix;
 
-        public NoteMatrix(int x = 3, int y = 6 , int unique = 3 )
+        public NoteMatrix(int maxX = 3, int maxY = 6, int unique = 3)
         {
-            this.x = x;
-            this.y = y;
+            this.maxX = maxX;
+            this.maxY = maxY;
             createNotesMatrix(unique);
         }
 
@@ -24,56 +24,62 @@ namespace Mus
 
         public void createNotesMatrix(int uniqueNotes)
         {
-            noteMatix = new int[x,y];
+            noteMatix = new int[maxX, maxY];
             generateRendomNotes(uniqueNotes);
         }
-        
+
 
         public void generateRendomNotes(int uniqueNotes = 3)
         {
-            noteMatix = new int[x,y];
-            for (int i = 0; i < x; i++)
+            noteMatix = new int[maxX, maxY];
+            for (int i = 0; i < maxX; i++)
             {
-                for (int j = 0; j < y; j++)
+                for (int j = 0; j < maxY; j++)
                 {
-                    noteMatix[i, j] = Random.Range(1, uniqueNotes+1);
+                    noteMatix[i, j] = Random.Range(1, uniqueNotes + 1);
                 }
-            }               
+            }
         }
 
-        public void getValidePositions(Note curNote)
+        //List<NoteCoord> validNotes = new List<NoteCoord>();
+        
+        public List<NoteCoord> getValidePositions(Note curNote)
         {
             List<NoteCoord> validNotes = new List<NoteCoord>();
-            int cx = curNote.noteCoord.x;
-            int cy = curNote.noteCoord.y;
-            getValidePositionsRecursive (cx, cy, curNote.type, validNotes);
+            getValidePositionsRecursive(curNote.noteCoord, curNote.type, validNotes);
+            return validNotes;
         }
 
-        private void getValidePositionsRecursive (int cx, int cy, int type, List<NoteCoord> validNotes)
+        private void getValidePositionsRecursive(NoteCoord coord, int type, List<NoteCoord> validNotes)
         {
-            if (cx + 1 <= x && noteMatix[cx + 1, cy] == type)
+            NoteCoord[] crossCoords =
             {
-                //todo подумать как не порождать новый NoteCoord()
-                validNotes.Add(new NoteCoord(cx + 1, cy));
-                getValidePositionsRecursive (cx + 1, cy, type, validNotes);
-            }
-            if (cx - 1 >= 0 && noteMatix[cx - 1, cy] == type)
+                new NoteCoord(coord.x + 1, coord.y),
+                new NoteCoord(coord.x - 1, coord.y),
+                new NoteCoord(coord.x, coord.y + 1),
+                new NoteCoord(coord.x, coord.y - 1)
+            };
+
+            foreach (NoteCoord crossCoord in crossCoords)
             {
-                validNotes.Add(new NoteCoord(cx - 1, cy));
-                getValidePositionsRecursive (cx - 1, cy, type, validNotes);
-            }
-            if (cy + 1 <= y && noteMatix[cx, cy + 1] == type)
-            {
-                validNotes.Add(new NoteCoord(cx, cy + 1));
-                getValidePositionsRecursive (cx, cy + 1, type, validNotes);
-            }
-            if (cy -1  >= 0 && noteMatix[cx, cy - 1] == type)
-            {
-                validNotes.Add(new NoteCoord(cx, cy - 1));
-                getValidePositionsRecursive (cx, cy - 1, type, validNotes);
-            }
+                if (!isCoordOutOfBounds(crossCoord) && getCoordsValue(crossCoord) == type  )
+                {
+                    validNotes.Add(crossCoord);
+                    getValidePositionsRecursive (coord, type, validNotes);
+                    
+                }
+            }      
+        }
+
+        private int getCoordsValue(NoteCoord coords)
+        {
+            return noteMatix[coords.x,coords.y];
         }
 
 
+        private bool isCoordOutOfBounds(NoteCoord coord)
+        {
+            return (coord.x < 0 || coord.x > maxX || coord.y < 0 || coord.y > maxY);
+        }
     }
 }
