@@ -65,7 +65,7 @@ namespace Mus
                 if (!isCoordOutOfBounds(crossCoord) && getCoordsValue(crossCoord) == type  )
                 {
                     validNotes.Add(crossCoord);
-                    getValidePositionsRecursive (coord, type, validNotes);
+//                    getValidePositionsRecursive (coord, type, validNotes);
                     
                 }
             }      
@@ -79,7 +79,7 @@ namespace Mus
 
         private bool isCoordOutOfBounds(NoteCoord coord)
         {
-            return (coord.x < 0 || coord.x > maxX || coord.y < 0 || coord.y > maxY);
+            return (coord.x < 0 || coord.x >= maxX || coord.y < 0 || coord.y >= maxY);
         }
     }
 }

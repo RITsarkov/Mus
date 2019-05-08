@@ -55,17 +55,18 @@ namespace Mus
                 {
                     Note note = hit.collider.gameObject.GetComponent<Note>();
                     //Если была выбрана первая нотка, то вычисляем какие позиции сможет выбрать игрк                    
-                    if (isFirstNote())
+//                    if (isFirstNote())
+                    if (!eeeea)
                     {
+                        eeeea = true;
                         List<NoteCoord> valideNotes = noteMatrix.getValidePositions(note);
-                        foreach (var valideNote in valideNotes)
+                        foreach (NoteCoord valideNote in valideNotes)
                         {
                             GameObject goNote = notesGameObjects[valideNote];
                             Note n = goNote.gameObject.GetComponent<Note>();
                             n.perspectiveModeOne(true);
                         }
                     }
-
 
                     note.selectedModeOne(true);
                     colidersBuff.Add(hit.collider);
@@ -82,9 +83,13 @@ namespace Mus
                     note.perspectiveModeOne(false);
                 }
 
+                eeeea = false;
                 colidersBuff.Clear();
             }
         }
+        
+        //TODO удалить это к х№"м
+        bool eeeea = false;
 
 
         //todo заменить. брать из notesGameObjects по  NoteCoord
