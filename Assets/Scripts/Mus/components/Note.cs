@@ -4,10 +4,15 @@ namespace Mus
 {
     public class Note : MonoBehaviour
     {
-//        void Start(){}
+        public bool isActive = false;
+        public int type; 
+        public NoteCoord noteCoord; 
+        
+        public GameObject selectedAnimation;
 
-        void Update () {
-
+        public void makeSelected(bool selected)
+        {
+            selectedAnimation.SetActive(selected);
         }
     }
 }
