@@ -42,68 +42,73 @@ namespace Mus
             if (Input.GetButton("Fire1"))
             {
 //                Debug.Log("Mouse Clicked!!!!");
-                //Debug.Log("Mouse Clicked" + this.transform);
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-
-                //TODO debug
-                //debugNoteMatrix.text = "x=" + mousePos.x + " ; y=" + mousePos.y + " ; z=" + mousePos.z;
-
                 RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
 
                 if (hit.collider != null)
                 {
                     Note note = hit.collider.gameObject.GetComponent<Note>();
-                    //Если была выбрана первая нотка, то вычисляем какие позиции сможет выбрать игрк                    
-                    if (isFirstNote())
+                    
+                    if (isFirstNote() || (!selectedNotes.Contains(hit.collider) && valideNotes.Contains(note.noteCoord)))
                     {
+                        perspectiveModeOne(false);
+                        //Если была выбрана первая нотка, то вычисляем какие позиции сможет выбрать игрк                    
                         valideNotes = noteMatrix.getValidePositions(note);
-                        foreach (NoteCoord valideNote in valideNotes)
-                        {
-                            GameObject goNote = notesGameObjects[valideNote];
-                            Note n = goNote.gameObject.GetComponent<Note>();
-                            n.perspectiveModeOne(true);
-                        }
-                    }
+                        perspectiveModeOne(true);
 
-                    if (valideNotes.Contains(note.noteCoord))
-                    {
                         note.selectedModeOne(true);
-                        colidersBuff.Add(hit.collider);
+                        selectedNotes.Add(hit.collider);
                     }
                 }
             }
 
             if (Input.GetButtonUp("Fire1"))
             {
-                foreach (Collider2D coll2d in colidersBuff)
-                {
-                    //Debug.Log("Hit" + coll2d.gameObject.transform.parent.name);
-                    Note note = coll2d.gameObject.GetComponent<Note>();
-                    note.selectedModeOne(false);
-                    note.perspectiveModeOne(false);
-                }
-                //TODO дублирование
-                foreach (NoteCoord noteCoord in valideNotes)
-                {
-                    GameObject goNote = notesGameObjects[noteCoord];
-                    Note n = goNote.gameObject.GetComponent<Note>();
-                    n.perspectiveModeOne(false);
-                }
-
-                colidersBuff.Clear();
+                selectedModeOne(false);
+                perspectiveModeOne(false);
+                
+                noteMatrix.removeNote();
+                selectedNotes.Clear();
                 valideNotes.Clear();
             }
         }
+
+        private void perspectiveModeOne(bool on)
+        {
+            if (valideNotes == null)
+                return;
+            
+            foreach (NoteCoord noteCoord in valideNotes)
+            {
+                GameObject goNote = notesGameObjects[noteCoord];
+                Note n = goNote.gameObject.GetComponent<Note>();
+                n.perspectiveModeOne(on);
+            }
+        }
         
+        private void selectedModeOne(bool on)
+        {
+            if (valideNotes == null)
+                return;
+            
+            foreach (Collider2D coll2d in selectedNotes)
+            {
+                Note note = coll2d.gameObject.GetComponent<Note>();
+                note.selectedModeOne(on);
+                note.perspectiveModeOne(on);
+            }
+        }
+
         //todo заменить. брать из notesGameObjects по  NoteCoord
-        private List<Collider2D> colidersBuff = new List<Collider2D>();
+        private List<Collider2D> selectedNotes = new List<Collider2D>();
+//        private List<NoteCoord> selectedNotes = new List<NoteCoord>();
         private List<NoteCoord> valideNotes;
         
 
         private bool isFirstNote()
         {
-            return colidersBuff.Count == 0;
+            return selectedNotes.Count == 0;
         }
 
 
