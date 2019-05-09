@@ -1,17 +1,21 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Mus
 {
     public class GameManager : MonoBehaviour
     {
-        private NoteMatrix noteMatrix;
+        private NoteMatrix noteMatrixData;
         private GameObject notePanelPref;
-
+        //Содержит ссылки на все нотки
+        private Dictionary<NoteCoord, GameObject> notesGameObjects = new Dictionary<NoteCoord, GameObject>();
+        private int currentScore = 0;
+        
         public Text debugNoteMatrix;
+        public Text scoreText;
         public GameObject notePanel;
         public Canvas canvas;
 
@@ -19,7 +23,7 @@ namespace Mus
 
         void Start()
         {
-            noteMatrix = new NoteMatrix();
+            noteMatrixData = new NoteMatrix();
 
             //Грузим панельку
             notePanelPref = Instantiate(notePanel, canvas.transform, false);
@@ -34,7 +38,7 @@ namespace Mus
 //            if (Input.GetButtonDown("Fire1"))
             if (Input.GetButtonDown("Jump"))
             {
-                noteMatrix.generateRendomNotes();
+                noteMatrixData.generateRendomNotes();
                 visualizeNoteMatix();
                 //visualizeNote();
             }
@@ -50,29 +54,33 @@ namespace Mus
                 {
                     Note note = hit.collider.gameObject.GetComponent<Note>();
                     
-                    if (isFirstNote() || (!selectedNotes.Contains(hit.collider) && valideNotes.Contains(note.noteCoord)))
+                    if (isFirstNote() || (!selectedNotes.Contains(note.noteCoord) && valideNotes.Contains(note.noteCoord)))
                     {
                         perspectiveModeOne(false);
                         //Если была выбрана первая нотка, то вычисляем какие позиции сможет выбрать игрк                    
-                        valideNotes = noteMatrix.getValidePositions(note);
+                        valideNotes = noteMatrixData.getValidePositions(note);
                         perspectiveModeOne(true);
 
                         note.selectedModeOne(true);
-                        selectedNotes.Add(hit.collider);
+                        selectedNotes.Add(note.noteCoord);
                     }
                 }
             }
-
             if (Input.GetButtonUp("Fire1"))
             {
                 selectedModeOne(false);
                 perspectiveModeOne(false);
+                noteMatrixData.removeNote(selectedNotes);
+                visualizeNote();
+                currentScore = currentScore + selectedNotes.Count;
+                scoreText.text = "Score: " + currentScore;
                 
-                noteMatrix.removeNote();
                 selectedNotes.Clear();
                 valideNotes.Clear();
+                
             }
         }
+        
 
         private void perspectiveModeOne(bool on)
         {
@@ -92,17 +100,15 @@ namespace Mus
             if (valideNotes == null)
                 return;
             
-            foreach (Collider2D coll2d in selectedNotes)
+            foreach (NoteCoord coord in selectedNotes)
             {
-                Note note = coll2d.gameObject.GetComponent<Note>();
+                Note note = notesGameObjects[coord].GetComponent<Note>();
                 note.selectedModeOne(on);
                 note.perspectiveModeOne(on);
             }
         }
 
-        //todo заменить. брать из notesGameObjects по  NoteCoord
-        private List<Collider2D> selectedNotes = new List<Collider2D>();
-//        private List<NoteCoord> selectedNotes = new List<NoteCoord>();
+        private List<NoteCoord> selectedNotes = new List<NoteCoord>();
         private List<NoteCoord> valideNotes;
         
 
@@ -110,17 +116,15 @@ namespace Mus
         {
             return selectedNotes.Count == 0;
         }
-
-
-        //todo вверх
-        //Содержит ссылки на все нотки
-        private Dictionary<NoteCoord, GameObject> notesGameObjects = new Dictionary<NoteCoord, GameObject>();
+        
 
         private void visualizeNote()
         {
+            //TODO отчистку этой мапы надо бы оптимизировать, а не перезатерать ее всю при обновлении.
+            notesGameObjects.Clear();
             var e = notePanelPref.transform.GetEnumerator();
 
-            int[,] notes = noteMatrix.getNoteMatrix();
+            int[,] notes = noteMatrixData.getNoteMatrix();
             for (int x = 0; x <= notes.GetUpperBound(0); x++)
             {
                 for (int y = 0; y <= notes.GetUpperBound(1); y++)
@@ -164,7 +168,7 @@ namespace Mus
 
         private void visualizeNoteMatix()
         {
-            int[,] notes = noteMatrix.getNoteMatrix();
+            int[,] notes = noteMatrixData.getNoteMatrix();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i <= notes.GetUpperBound(0); i++)
             {
