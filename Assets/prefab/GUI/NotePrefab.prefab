@@ -119,7 +119,7 @@ MonoBehaviour:
   isActive: 0
   type: 0
   selectedAnimation: {fileID: 7028937033360310094}
-  perspectiveAnimation: {fileID: 0}
+  perspectiveAnimation: {fileID: 922596650980176662}
 --- !u!1 &922596650980176662
 GameObject:
   m_ObjectHideFlags: 0

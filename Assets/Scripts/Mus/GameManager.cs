@@ -55,11 +55,9 @@ namespace Mus
                 {
                     Note note = hit.collider.gameObject.GetComponent<Note>();
                     //Если была выбрана первая нотка, то вычисляем какие позиции сможет выбрать игрк                    
-//                    if (isFirstNote())
-                    if (!eeeea)
+                    if (isFirstNote())
                     {
-                        eeeea = true;
-                        List<NoteCoord> valideNotes = noteMatrix.getValidePositions(note);
+                        valideNotes = noteMatrix.getValidePositions(note);
                         foreach (NoteCoord valideNote in valideNotes)
                         {
                             GameObject goNote = notesGameObjects[valideNote];
@@ -68,8 +66,11 @@ namespace Mus
                         }
                     }
 
-                    note.selectedModeOne(true);
-                    colidersBuff.Add(hit.collider);
+                    if (valideNotes.Contains(note.noteCoord))
+                    {
+                        note.selectedModeOne(true);
+                        colidersBuff.Add(hit.collider);
+                    }
                 }
             }
 
@@ -77,23 +78,28 @@ namespace Mus
             {
                 foreach (Collider2D coll2d in colidersBuff)
                 {
-                    Debug.Log("Hit" + coll2d.gameObject.transform.parent.name);
+                    //Debug.Log("Hit" + coll2d.gameObject.transform.parent.name);
                     Note note = coll2d.gameObject.GetComponent<Note>();
                     note.selectedModeOne(false);
                     note.perspectiveModeOne(false);
                 }
+                //TODO дублирование
+                foreach (NoteCoord noteCoord in valideNotes)
+                {
+                    GameObject goNote = notesGameObjects[noteCoord];
+                    Note n = goNote.gameObject.GetComponent<Note>();
+                    n.perspectiveModeOne(false);
+                }
 
-                eeeea = false;
                 colidersBuff.Clear();
+                valideNotes.Clear();
             }
         }
         
-        //TODO удалить это к х№"м
-        bool eeeea = false;
-
-
         //todo заменить. брать из notesGameObjects по  NoteCoord
         private List<Collider2D> colidersBuff = new List<Collider2D>();
+        private List<NoteCoord> valideNotes;
+        
 
         private bool isFirstNote()
         {

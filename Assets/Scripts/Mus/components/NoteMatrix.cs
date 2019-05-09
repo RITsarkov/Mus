@@ -62,15 +62,17 @@ namespace Mus
 
             foreach (NoteCoord crossCoord in crossCoords)
             {
-                if (!isCoordOutOfBounds(crossCoord) && getCoordsValue(crossCoord) == type  )
+                if (!validNotes.Contains(crossCoord) && !isCoordOutOfBounds(crossCoord) && getCoordsValue(crossCoord) == type)  
                 {
                     validNotes.Add(crossCoord);
-//                    getValidePositionsRecursive (coord, type, validNotes);
+                    getValidePositionsRecursive (crossCoord, type, validNotes);
                     
                 }
             }      
         }
 
+        
+        
         private int getCoordsValue(NoteCoord coords)
         {
             return noteMatix[coords.x,coords.y];

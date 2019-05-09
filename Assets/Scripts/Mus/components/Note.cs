@@ -18,7 +18,7 @@ namespace Mus
         
         public void perspectiveModeOne(bool selected)
         {
-            selectedAnimation.SetActive(selected);
+            perspectiveAnimation.SetActive(selected);
         }
     }
 }
