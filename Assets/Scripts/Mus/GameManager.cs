@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Mus
@@ -70,11 +69,14 @@ namespace Mus
             {
                 selectedModeOne(false);
                 perspectiveModeOne(false);
-                noteMatrixData.removeNote(selectedNotes);
-                visualizeNote();
-                currentScore = currentScore + selectedNotes.Count;
-                scoreText.text = "Score: " + currentScore;
-                
+                if (selectedNotes.Count > 1)
+                {
+                    //Очки зачислены
+                    noteMatrixData.removeNote(selectedNotes);
+                    visualizeNote();
+                    currentScore = currentScore + selectedNotes.Count;
+                    scoreText.text = "Score: " + currentScore;
+                }
                 selectedNotes.Clear();
                 valideNotes.Clear();
                 
