@@ -83,10 +83,10 @@ namespace Mus
 
 
 //================== Расчет позиций для нахождения соседних нот того-же типа =============================
-        public List<NoteCoord> getValidePositions(Note curNote)
+        public List<NoteCoord> getValidePositions(NoteCoord noteCoord,int type)
         {
             List<NoteCoord> validNotes = new List<NoteCoord>();
-            getValidePositionsRecursive(curNote.noteCoord, curNote.type, validNotes);
+            getValidePositionsRecursive(noteCoord, type, validNotes);
             return validNotes;
         }
 

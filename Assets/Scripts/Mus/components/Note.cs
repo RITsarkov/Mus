@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Mus
 {
     public class Note : MonoBehaviour
     {
-        public int type; 
-        public NoteCoord noteCoord;
+        [SerializeField]
+        private Image _image;
+        private int type; 
+        private NoteCoord noteCoord;
         
 
         private bool _selected = false;
@@ -28,6 +31,31 @@ namespace Mus
         {
             if(!_selected)
                 perspectiveAnimation.SetActive(selected);
+        }
+
+        public void setColor(Color color)
+        {
+            _image.color = color;
+        }
+        
+        public void setCoord(NoteCoord coord)
+        {
+            this.noteCoord = coord;
+        }
+        
+        public NoteCoord getCoord()
+        {
+            return noteCoord;
+        }
+        
+        public void setType(int type)
+        {
+            this.type = type;
+        }   
+        
+        public int getType()
+        {
+            return type;
         }
     }
 }

@@ -116,8 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21fd3e2402349c4082fb87e93380f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 0
-  type: 0
+  _image: {fileID: 5106769098019657102}
   selectedAnimation: {fileID: 7028937033360310094}
   perspectiveAnimation: {fileID: 922596650980176662}
 --- !u!1 &922596650980176662
