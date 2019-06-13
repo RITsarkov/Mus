@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Mus
 {
@@ -13,26 +11,59 @@ namespace Mus
         
         //Содержит ссылки на все нотки
         private Dictionary<NoteCoord, Note> notesGameObjects = new Dictionary<NoteCoord, Note>();
+        private Dictionary<NoteCoord, Vector3> notesGuiPositions = new Dictionary<NoteCoord, Vector3>();
 
         //TODO хм... а зачем это тут?
         public Note getNoteObject(NoteCoord coord)
         {
             return notesGameObjects[coord];
         }
+        
+        //TODO положение первой ноты
+//        private Transform noteFirst = new Transform(); 
+//        private RectTransform firstTransform = new RectTransform
+//        {
+//            anchorMin = new Vector2(0,1F),
+//            anchorMax = new Vector2(0,1F),
+//            position = new Vector3(120,0,120)
+//        };
+        private int startX = 73;
+        private int startY = -73;
+        private int deltaX = 120;
+        private int deltaY = -120;
 
-
+//        public void createVisualRepresentation(int[,] noteMatrixData)
+//        {
+//            var enumNotePlace = transform.GetEnumerator();
+//            for (int x = 0; x <= noteMatrixData.GetUpperBound(0); x++)
+//            {
+//                for (int y = 0; y <= noteMatrixData.GetUpperBound(1); y++)
+//                {
+//                    if (enumNotePlace.MoveNext())
+//                        addNote((Transform) enumNotePlace.Current, noteMatrixData[x, y], x, y);
+//                }
+//            }
+//        }
+        
         public void createVisualRepresentation(int[,] noteMatrixData)
         {
-            var enumNotePlace = transform.GetEnumerator();
-            for (int x = 0; x <= noteMatrixData.GetUpperBound(0); x++)
+
+            for (int y = 0; y <= noteMatrixData.GetUpperBound(0); y++)
             {
-                for (int y = 0; y <= noteMatrixData.GetUpperBound(1); y++)
+                for (int x = 0; x <= noteMatrixData.GetUpperBound(1); x++)
                 {
-                    if (enumNotePlace.MoveNext())
-                        addNote((Transform) enumNotePlace.Current, noteMatrixData[x, y], x, y);
+                    addNote(noteMatrixData[y, x], x, y);
                 }
             }
         }
+        
+        
+        
+        
+        
+        
+        
+        
         
 
         private Color getColor(int index)
@@ -46,15 +77,66 @@ namespace Mus
         }
 
 
-        private void addNote(Transform parrentTransform, int noteId, int x, int y)
+//        private void addNote(Transform transform, int noteId, int x, int y)
+//        {
+//            Note newNote = Instantiate(notePrefab, transform, false);
+//            newNote.setColor(getColor(noteId));
+//            NoteCoord nc = new NoteCoord(x, y);
+//            newNote.setCoord(nc);
+//            newNote.setType(noteId);
+//            notesGameObjects.Add(nc, newNote);
+//            notesGuiPositions.Add(nc, transform.position);
+//        }
+        
+        private void addNote(int noteId, int x, int y)
         {
-            Note newNote = Instantiate(notePrefab, parrentTransform, false);
+            Note newNote = Instantiate(notePrefab, transform, false);
+            
+            //Выставляем позицию ноты
+            ((RectTransform) newNote.transform).anchorMin = new Vector2(0, 1F);
+            ((RectTransform) newNote.transform).anchorMax = new Vector2(0, 1F);
+//            ((RectTransform) newNote.transform).localPosition = new Vector3(startY+deltaY*y,startX+deltaX*x, 0);
+            ((RectTransform) newNote.transform).anchoredPosition = new Vector2(startX+deltaX*x,startY+deltaY*y);
+            ((RectTransform) newNote.transform).localScale = Vector3.one;
+            
+            newNote.name = "x" + x + "y" + y;
+            
             newNote.setColor(getColor(noteId));
             NoteCoord nc = new NoteCoord(x, y);
             newNote.setCoord(nc);
             newNote.setType(noteId);
             notesGameObjects.Add(nc, newNote);
+            notesGuiPositions.Add(nc, transform.position);
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         //Включить подсветку для следующих нот из списка

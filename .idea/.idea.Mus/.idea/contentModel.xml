@@ -12,11 +12,11 @@
             <e p="components" t="Include">
               <e p="note.cs" t="Include" />
               <e p="NoteCoord.cs" t="Include" />
-              <e p="NoteMatrix.cs" t="Include" />
             </e>
             <e p="GameManager.cs" t="Include" />
             <e p="system" t="Include">
               <e p="NoteMarcSystem.cs" t="Include" />
+              <e p="NoteMatrix.cs" t="Include" />
               <e p="NoteVisualizer.cs" t="Include" />
             </e>
           </e>

@@ -13,7 +13,7 @@ namespace Mus
         public NoteMatrix(int maxX = 3, int maxY = 6, int unique = 3)
         {
             this.maxX = maxX;
-            this.maxY = maxY;
+            this.maxY = maxY*2;
             this.uniqueNotes = unique;
             createNotesMatrix();
         }
@@ -44,8 +44,11 @@ namespace Mus
         }
 
 
-        public void removeNote(List<NoteCoord> noteCoords)
+        public Dictionary<NoteCoord, NoteCoord> removeNote(List<NoteCoord> noteCoords)
         {
+            //<position1 -> position2>
+            Dictionary<NoteCoord, NoteCoord> positionChange = new Dictionary<NoteCoord, NoteCoord>(); 
+            
             //Все нотки которые будут удалены проставляем в матрицу
             foreach (var coord in noteCoords)
             {
@@ -56,11 +59,14 @@ namespace Mus
             {
                 //Формируем строку с удаленными нотами
                 List<int> newLine = new List<int>();
+                int n = 0;
                 for (int j = 0; j < maxY; j++)
                 {
                     if (noteMatix[i, j] != -2)
                     {
                         newLine.Add(noteMatix[i, j]);
+                        positionChange.Add(new NoteCoord(i, j), new NoteCoord(n, j));
+                        n++;
                     }
                 }
                 //Заменяем
@@ -71,9 +77,14 @@ namespace Mus
                         noteMatix[i, j] = newLine[j];
                     }
                     else
+                    {
                         noteMatix[i, j] = getRendomNote();
+                        positionChange.Add(new NoteCoord(i, j), new NoteCoord(n, j));
+                    }
                 }
             }
+
+            return positionChange;
         }
 
         private int getRendomNote()
